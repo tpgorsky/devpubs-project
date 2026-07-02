@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}Регистрация — DevPubs{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center py-5">
+    <div class="col-md-6">
+        <div class="card shadow-lg border-0 rounded-3">
+            <div class="card-body p-5">
+                <h2 class="fw-bold text-center text-dark mb-4">Создать аккаунт</h2>
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    {% for field in form %}
+                        <div class="mb-3">
+                            <label class="form-label text-secondary small">{{ field.label }}</label>
+                            {{ field }}
+                            {% if field.help_text %}
+                                <div class="text-muted small mt-1" style="font-size: 11px;">{{ field.help_text|safe }}</div>
+                            {% endif %}
+                            {% if field.errors %}
+                                <div class="text-danger small mt-1">{{ field.errors|striptags }}</div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                    
+                    <button type="submit" class="btn btn-success w-100 py-2.5 mt-4 rounded-2 fw-semibold">Зарегистрироваться</button>
+                </form>
+                
+                <hr class="my-4">
+                <p class="text-center text-muted small mb-0">Уже зарегистрированы? <a href="{% url 'login' %}" class="text-primary text-decoration-none">Войти здесь</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Добавляем Bootstrap классы к полям формы Django по умолчанию -->
+<script>
+    document.querySelectorAll('input').forEach(el => el.classList.add('form-control'));
+</script>
+{% endblock %}

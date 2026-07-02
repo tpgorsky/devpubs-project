@@ -1,0 +1,51 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm py-3">
+    <div class="container">
+        <!-- Логотип сайта -->
+        <a class="navbar-brand fw-bold text-info" href="{% url 'home' %}">
+            <i class="bi bi-terminal-fill me-2"></i>DevPubs
+        </a>
+
+        <!-- Кнопка мобильного меню -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Ссылки навигации -->
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'home' %}">Главная</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'post_list' %}">Все публикации</a>
+                </li>
+            </ul>
+
+            <ul class="navbar-nav ms-auto align-items-center">
+                {% if user.is_authenticated %}
+                    <!-- Если пользователь вошел на сайт -->
+                    <li class="nav-item">
+                        <a class="btn btn-outline-info btn-sm my-1 me-3" href="{% url 'post_create' %}">
+                            <i class="bi bi-plus-circle me-1"></i> Написать пост
+                        </a>
+                    </li>
+                    <li class="nav-item me-3 text-light py-1">
+                        <span class="text-secondary small">Привет,</span>
+                        <strong class="text-info">{{ user.username }}</strong>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-danger fw-semibold" href="{% url 'logout' %}">Выйти</a>
+                    </li>
+                {% else %}
+                    <!-- Если пользователь гость -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login' %}">Войти</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn btn-info btn-sm my-1 ms-2 px-3 fw-medium text-dark" href="{% url 'register' %}">Регистрация</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>

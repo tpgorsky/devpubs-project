@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %}Главная — DevPubs{% endblock %}
+
+{% block content %}
+<!-- Приветственный баннер -->
+<div class="row align-items-center g-5 py-5 mb-5 bg-white rounded-3 p-4 shadow-sm border">
+    <div class="col-10 col-sm-8 col-lg-6 text-center">
+        <i class="bi bi-code-slash text-info" style="font-size: 8rem;"></i>
+    </div>
+    <div class="col-lg-6">
+        <h1 class="display-5 fw-bold lh-1 mb-3 text-dark">Разделяй знания в DevPubs</h1>
+        <p class="lead text-muted">Добро пожаловать на платформу для публикации технических статей, обмена опытом и ведения дискуссий. Проект разработан на Django по архитектуре MVT.</p>
+        <div class="d-grid gap-2 d-md-flex justify-content-md-start mt-4">
+            <a href="{% url 'post_list' %}" class="btn btn-primary btn-lg px-4 me-md-2">Читать публикации</a>
+            {% if not user.is_authenticated %}
+                <a href="{% url 'register' %}" class="btn btn-outline-secondary btn-lg px-4">Создать аккаунт</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Блок свежих постов -->
+<h2 class="fw-bold mb-4 text-dark"><i class="bi bi-stars text-warning me-2"></i>Последние статьи</h2>
+<div class="row g-4">
+    {% for post in posts %}
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm border-0">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title fw-bold text-truncate text-dark">{{ post.title }}</h5>
+                    <p class="text-muted small mb-2"><i class="bi bi-person"></i> {{ post.author.username }}</p>
+                    <p class="card-text text-secondary mb-4 flex-grow-1">{{ post.content|truncatewords:15 }}</p>
+                    <a href="{% url 'post_detail' post.pk %}" class="btn btn-outline-info btn-sm mt-auto">Читать далее</a>
+                </div>
+            </div>
+        </div>
+    {% empty %}
+        <div class="col-12">
+            <p class="text-muted">Публикаций пока нет. Стань первым автором!</p>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

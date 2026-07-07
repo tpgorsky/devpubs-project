@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% block title %}{{ ad.title }}{% endblock %}
+
+{% block content %}
+<div class="card shadow content-card mb-4">
+    <div class="card-body">
+        <div class="d-flex justify-content-between align-items-start">
+            <h2 class="fw-bold">{{ ad.title }}</h2>
+            <span class="badge bg-info text-dark fs-6">{{ ad.get_category_display }}</span>
+        </div>
+        <p class="text-secondary small mb-3">
+            <i class="fa-solid fa-user me-1"></i>{{ ad.author.username }}
+            <i class="fa-regular fa-clock ms-3 me-1"></i>{{ ad.created_at|date:"d.m.Y H:i" }}
+        </p>
+        <p class="fs-5">{{ ad.description|linebreaks }}</p>
+        <div class="d-flex justify-content-between align-items-center">
+            <span class="fw-bold text-success fs-4">
+                <i class="fa-solid fa-tag me-1"></i>{{ ad.price }} ₸
+            </span>
+            {% if ad.author == user %}
+                <a class="btn btn-outline-primary" href="{% url 'ad_edit' ad.pk %}">
+                    <i class="fa-solid fa-pen me-1"></i> Редактировать
+                </a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<div class="card shadow content-card">
+    <div class="card-body">
+        <h4 class="mb-3">
+            <i class="fa-regular fa-comments me-2"></i>Комментарии
+            <span class="badge bg-secondary">{{ ad.comments.count }}</span>
+        </h4>
+
+        <form method="post" class="mb-4">
+            {% csrf_token %}
+            {{ form.text }}
+            <button type="submit" class="btn btn-warning mt-2 fw-semibold">
+                <i class="fa-regular fa-paper-plane me-1"></i> Отправить
+            </button>
+        </form>
+
+        {% for comment in page_obj %}
+            <div class="border rounded p-3 mb-2 bg-light">
+                <div class="d-flex justify-content-between">
+                    <strong><i class="fa-solid fa-circle-user me-1"></i>{{ comment.author.username }}</strong>
+                    <small class="text-secondary">{{ comment.created_at|date:"d.m.Y H:i" }}</small>
+                </div>
+                <p class="mb-1 mt-1">{{ comment.text }}</p>
+                {% if comment.author == user or ad.author == user %}
+                    <form method="post" action="{% url 'comment_delete' comment.pk %}" class="text-end">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-sm btn-outline-danger">
+                            <i class="fa-solid fa-trash me-1"></i>Удалить
+                        </button>
+                    </form>
+                {% endif %}
+            </div>
+        {% empty %}
+            <p class="text-muted">Комментариев пока нет.</p>
+        {% endfor %}
+
+        {% if page_obj.has_other_pages %}
+        <nav aria-label="Пагинация комментариев">
+            <ul class="pagination pagination-sm justify-content-center mt-3">
+                {% for num in page_obj.paginator.page_range %}
+                    <li class="page-item {% if num == page_obj.number %}active{% endif %}">
+                        <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </nav>
+        {% endif %}
+    </div>
+</div>
+
+<a class="btn btn-outline-light mt-3" href="{% url 'ad_list' %}">
+    <i class="fa-solid fa-arrow-left me-1"></i> К списку объявлений
+</a>
+{% endblock %}

@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% block title %}Доска объявлений{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="fw-bold text-white">
+        <i class="fa-solid fa-bullhorn me-2 text-warning"></i>Доска объявлений
+    </h1>
+    <a class="btn btn-warning fw-semibold" href="{% url 'ad_create' %}">
+        <i class="fa-solid fa-plus me-1"></i> Подать объявление
+    </a>
+</div>
+
+{% for ad in page_obj %}
+    <div class="card mb-3 shadow content-card">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-start">
+                <h4 class="card-title mb-1">
+                    <a class="text-decoration-none" href="{% url 'ad_detail' ad.pk %}">{{ ad.title }}</a>
+                </h4>
+                <span class="badge bg-info text-dark">{{ ad.get_category_display }}</span>
+            </div>
+            <p class="card-text text-muted mb-2">{{ ad.description|truncatechars:150 }}</p>
+            <div class="d-flex justify-content-between align-items-center">
+                <span class="fw-bold text-success fs-5">
+                    <i class="fa-solid fa-tag me-1"></i>{{ ad.price }} ₸
+                </span>
+                <small class="text-secondary">
+                    <i class="fa-solid fa-user me-1"></i>{{ ad.author.username }}
+                    <i class="fa-regular fa-clock ms-2 me-1"></i>{{ ad.created_at|date:"d.m.Y H:i" }}
+                    <i class="fa-regular fa-comments ms-2 me-1"></i>{{ ad.comments.count }}
+                </small>
+            </div>
+        </div>
+    </div>
+{% empty %}
+    <div class="alert alert-light text-center">Объявлений пока нет. Станьте первым!</div>
+{% endfor %}
+
+{% if page_obj.has_other_pages %}
+<nav aria-label="Пагинация">
+    <ul class="pagination justify-content-center">
+        {% if page_obj.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.previous_page_number }}">
+                    <i class="fa-solid fa-angle-left"></i>
+                </a>
+            </li>
+        {% endif %}
+        {% for num in page_obj.paginator.page_range %}
+            <li class="page-item {% if num == page_obj.number %}active{% endif %}">
+                <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+            </li>
+        {% endfor %}
+        {% if page_obj.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.next_page_number }}">
+                    <i class="fa-solid fa-angle-right"></i>
+                </a>
+            </li>
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}
+{% endblock %}

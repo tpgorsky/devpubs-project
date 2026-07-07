@@ -1,0 +1,31 @@
+/* Основные стили проекта: шрифты и фоновое изображение. */
+
+body {
+    font-family: 'Rubik', 'Montserrat', sans-serif;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    /* Задний фон изображением с тёмной подложкой для читаемости */
+    background: linear-gradient(rgba(15, 23, 42, 0.75), rgba(15, 23, 42, 0.85)),
+        url('../img/background.jpg') no-repeat center center fixed;
+    background-size: cover;
+}
+
+h1, h2, h3, h4, h5, .navbar-brand {
+    font-family: 'Montserrat', sans-serif;
+}
+
+main {
+    flex: 1;
+}
+
+a {
+    transition: color 0.2s ease-in-out;
+}
+
+/* Полупрозрачные карточки поверх фонового изображения */
+.content-card {
+    background-color: rgba(255, 255, 255, 0.96);
+    border: none;
+    border-radius: 0.75rem;
+}

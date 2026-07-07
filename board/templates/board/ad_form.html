@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-7">
+        <div class="card shadow content-card">
+            <div class="card-body p-4">
+                <h2 class="fw-bold mb-4">
+                    <i class="fa-solid fa-bullhorn me-2 text-warning"></i>{{ title }}
+                </h2>
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Заголовок</label>
+                        {{ form.title }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Описание</label>
+                        {{ form.description }}
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold">Цена, ₸</label>
+                            {{ form.price }}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold">Категория</label>
+                            {{ form.category }}
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-warning fw-semibold">
+                        <i class="fa-regular fa-floppy-disk me-1"></i> Сохранить
+                    </button>
+                    <a class="btn btn-outline-secondary ms-2" href="{% url 'ad_list' %}">Отмена</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
